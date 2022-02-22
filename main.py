@@ -1,18 +1,10 @@
-from functions import *
+from github import Github
 
-USERNAME = 'jithinj-lp'
-USER_EMAIL = 'jithin.j@logicplum.com'
 
-execute('git init')
-execute('django-admin startproject mysite')
-execute('git config --global user.name "%s"'%USERNAME)
-execute('git config --global user.email "%s"'%USER_EMAIL)
-execute('git config --global --list')
+g = Github('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')
+u = g.get_user()
+try:
+    u.create_repo('newrepo', gitignore_template='Python', private=True)
+except Exception as e:
+    print(e)
 
-l = '''git add .
-git commit -m "first commit"
-git remote add origin git@github.com:jithinj-lp/newrepo.git
-git push -u origin master'''.split('\n')
-
-for i in l:
-    execute(i)

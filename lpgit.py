@@ -3,6 +3,8 @@ import os
 
 
 class GitAccount:
+    '''This class creates a git account intance
+    Make sure that git token is not exposed in github'''
     def __init__(self, token:str=None) -> None:
         try:
             print('connecting to git server')
@@ -17,7 +19,7 @@ class GitAccount:
     def __str__(self) -> str:
         return self.user.name
     
-    def push_dir(self,repo:str,  path:str,branch:str='main', message:str='New commit'):
+    def push_dir(self,repo:str,  path:str,branch:str='main', message:str='New commit') -> None:
         rep = self.g.get_repo(repo)
         print('getting files ready for updating...')
         ls = self.__ls_list(path)       
@@ -35,18 +37,21 @@ class GitAccount:
                 print('Error uploading', i,'\n', e)
 
     def initialize(self,path:str, project_name:str,branches=['main', 'develop'], private=True, gitignore_template:str='Python'):
-        try:
+        # try:
             try:
                 self.user.create_repo(project_name, gitignore_template=gitignore_template, private=private)
-                repo = self.g.get_repo(project_name)
+                repo = self.g.get_repo('jithinj-lp/'+project_name)
             except:
-                repo = self.g.get_repo(project_name)
+                repo = self.g.get_repo('jithinj-lp/'+project_name)
+            print(repo)
             sb = repo.get_branch('main')
-            repo.create_git_ref(ref='refs/heads/' + 'develop', sha=sb.commit.sha)
-        except Exception as e:
-            print(e)
+            for i in branches:
+                try:
+                    repo.create_git_ref(ref='refs/heads/' + i, sha=sb.commit.sha)
+                except Exception as e:
+                    print(e)
 
-    def __ls_list(self,dirName):
+    def __ls_list(self,dirName, out=True):
         listOfFile = os.listdir(dirName)
         result = []
         allFiles = list()
@@ -57,7 +62,10 @@ class GitAccount:
             else:
                 allFiles.append(fullPath)  
         for i in allFiles:
-            result.append(i.replace(f'\\', f'/'))           
+            result.append(i.replace(f'\\', f'/')) 
+        if out:
+            for i in result:
+                print('>',i)          
         return result
 
 def ls_list(dirName):

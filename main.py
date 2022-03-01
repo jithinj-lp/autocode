@@ -18,6 +18,7 @@ import os
 
 g = Github(token)
 u = g.get_user()
+print(u.login)
 repo = g.get_repo('jithinj-lp/newsample')
 
 

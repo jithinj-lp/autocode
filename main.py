@@ -10,8 +10,7 @@ def getListOfFiles(dirName):
         if os.path.isdir(fullPath):
             allFiles = allFiles + getListOfFiles(fullPath)
         else:
-            allFiles.append(fullPath)
-                
+            allFiles.append(fullPath) 
     return allFiles  
 
 for i in getListOfFiles('venv'):
@@ -19,10 +18,8 @@ for i in getListOfFiles('venv'):
 
 g = Github(token)
 u = g.get_user()
-# u.create_ m,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 repo = g.get_repo('jithinj-lp/newrepo')
-repo.
-
+repo.create_repo()
 repo.update_file()
 repo.create_git_ref()
 repo.create_git_tree()

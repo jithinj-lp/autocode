@@ -8,7 +8,7 @@ import base64
 from github import Github
 from pprint import pprint
 
-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
+# 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
 class GitAccount:
     def __init__(self, username, password:str=None, token:str=None) -> None:
         self.username = username

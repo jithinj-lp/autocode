@@ -1,7 +1,7 @@
 """
-pyexample.
+lpgit.
 
-An example python library.
+An package for LogicPlum.
 """
 
 __version__ = "2.0.0"

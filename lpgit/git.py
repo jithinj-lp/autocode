@@ -19,7 +19,7 @@ class GitAccount:
     def __str__(self) -> str:
         return str(self.user.name)
 
-    def push_dir(self, project_name: str,  path: str, org: str = 'LogicPlum', branch: str = 'main', message: str = 'Initial', safe:bool=True) -> None:
+    def push_dir(self, project_name: str,  path: str, org: str , branch: str = 'main', message: str = 'Initial', safe:bool=True) -> None:
         rep = self.g.get_organization(org).get_repo(project_name)
         print('getting files ready for updating...')
         ls = self.__ls_list(path)
@@ -47,7 +47,7 @@ class GitAccount:
         self, 
         path: str, 
         project_name: str, 
-        org: str = 'LogicPlum', 
+        org: str = 'LogicPlum',
         message: str = 'Initial', 
         branch: str = 'main', 
         branches=['develop', ], 
@@ -58,7 +58,7 @@ class GitAccount:
         '''
         path: str, 
         project_name: str, 
-        org: str = 'LogicPlum', 
+        org: str,
         message: str = 'Initial', 
         branch: str = 'main', 
         branches=['develop', ], 

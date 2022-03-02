@@ -19,13 +19,18 @@ class GitAccount:
     def __str__(self) -> str:
         return str(self.user.name)
 
-    def push_dir(self, project_name: str,  path: str, branch: str = 'main', message: str = 'Initial') -> None:
-        rep = self.g.get_repo(self.user.login+'/'+project_name)
+    def push_dir(self, project_name: str,  path: str, org: str = 'LogicPlum', branch: str = 'main', message: str = 'Initial', safe:bool=True) -> None:
+        rep = self.g.get_organization(org).get_repo(project_name)
         print('getting files ready for updating...')
         ls = self.__ls_list(path)
+        print('Files ready')
+        print(f'Selected branch : {branch}')
+        if safe : 
+            while input('password :') != '111':
+                print('incorrect password')
         for i in ls:
+            print('uploading', i, end='  ')
             try:
-                print('uploading', i, end='  ')
                 with open(i) as f:
                     content = open(i, 'rb').read()
                     try:
@@ -38,20 +43,41 @@ class GitAccount:
             except Exception as e:
                 print('Error uploading', i, '\n', e)
 
-    def initialize(self, path: str, project_name: str, branches=['develop',], private=True, gitignore_template: str = 'Python'):
+    def initialize(
+        self, 
+        path: str, 
+        project_name: str, 
+        org: str = 'LogicPlum', 
+        message: str = 'Initial', 
+        branch: str = 'main', 
+        branches=['develop', ], 
+        private=True, 
+        gitignore_template: str = 'Python', 
+        safe:bool=True
+    ):
+        orgz = self.g.get_organization(org)
+        print('Organization :', orgz.login)
         try:
-            self.user.create_repo(
+            orgz.create_repo(
                 project_name, gitignore_template=gitignore_template, private=private)
-            repo = self.g.get_repo(self.user.login+'/' + project_name)
-        except:
-            repo = self.g.get_repo(self.user.login+'/'+project_name)
-        print(repo)
+
+        except Exception as e:
+            if e.status == 422:
+                print(f"Repo '{project_name}' already exists and connected")
+        repo = orgz.get_repo(project_name)
+        print('Repo full name :', repo.full_name)
+        if safe:
+            while input('password :') != '111':
+                print('incorrect password')
         sb = repo.get_branch('main')
         for i in branches:
             try:
                 repo.create_git_ref(ref='refs/heads/' + i, sha=sb.commit.sha)
             except Exception as e:
-                print(e)
+                if e.status == 422:
+                    print(f'Branch {i} already exists')
+        self.push_dir(path=path, project_name=project_name,
+                      branch=branch, message=message)
 
     def __ls_list(self, dirName, out=True):
         listOfFile = os.listdir(dirName)

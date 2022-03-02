@@ -55,6 +55,17 @@ class GitAccount:
         gitignore_template: str = 'Python', 
         safe:bool=True
     ):
+        '''
+        path: str, 
+        project_name: str, 
+        org: str = 'LogicPlum', 
+        message: str = 'Initial', 
+        branch: str = 'main', 
+        branches=['develop', ], 
+        private=True, 
+        gitignore_template: str = 'Python', 
+        safe:bool=True
+        '''
         orgz = self.g.get_organization(org)
         print('Organization :', orgz.login)
         try:
